@@ -27,9 +27,14 @@ class Register : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        val regionRetrofit = Retrofit.Builder()
+            .baseUrl("http://14.52.69.42:3000")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val regionServer = regionRetrofit.create(APIS::class.java)
+
         btn_register.setOnClickListener {
 
-            /*
             Log.d(TAG, "회원가입 완료 버튼 클릭")
 
             val id = edit_id.text.toString()
@@ -48,26 +53,46 @@ class Register : AppCompatActivity() {
                     isPWSame = true
             }
 
+            // data class
+            val userInfo = User(id,pw,name,birth,phone)
+
+            Log.d("log",userInfo.id)
+
             if(!isExistBlank && isPWSame){
-                // 성공 토스트
-                Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show()
 
-                // shared 저장
-                val sharedPreference = getSharedPreferences("file name", Context.MODE_PRIVATE)
-                val editor = sharedPreference.edit()
-                editor.putString("id", id)
-                editor.putString("pw", pw)
-                editor.putString("name", name)
-                editor.putString("birth", birth)
-                editor.putString("phone", phone)
-                editor.apply()
+                regionServer?.register(userInfo)?.enqueue( object: Callback<Boolean> {
+                    override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                        Log.d("log", "getResponse")
+                        if(response.body() == true){
+                            // 성공 토스트
+                            Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
 
-                // login 화면으로 이동
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                            // shared 저장
+                            val sharedPreference = getSharedPreferences("file name", Context.MODE_PRIVATE)
+                            val editor = sharedPreference.edit()
+                            editor.putString("id", id)
+                            editor.putString("pw", pw)
+                            editor.putString("name", name)
+                            editor.putString("birth", birth)
+                            editor.putString("phone", phone)
+                            editor.apply()
+
+                            // login 화면으로 이동
+                            val intent = Intent(applicationContext, MainActivity::class.java)
+                            startActivity(intent)
+                        }
+                        else{
+                            dialog("diff")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                        Log.d("log", t.message.toString())
+                        Log.d("log", "fail")
+                    }
+                })
             }
             else{
-
                 // issue 출력
                 if(isExistBlank) {
                     dialog("blank")
@@ -75,7 +100,7 @@ class Register : AppCompatActivity() {
                 else if(!isPWSame){
                     dialog("diff")
                 }
-            }*/
+            }
         }
     }
 

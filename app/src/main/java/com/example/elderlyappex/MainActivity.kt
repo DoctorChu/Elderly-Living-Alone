@@ -11,7 +11,10 @@ import retrofit2.*
 import com.example.elderlyappex.network.APIS
 import com.example.elderlyappex.network.DTO
 import com.example.elderlyappex.network.User
+import com.example.elderlyappex.network.login
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.btn_register
+import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
@@ -23,59 +26,45 @@ class MainActivity : AppCompatActivity() {
             .baseUrl("http://14.52.69.42:3000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        var regionServer: APIS? = regionRetrofit.create(APIS::class.java)
+        val regionServer = regionRetrofit.create(APIS::class.java)
         setContentView(R.layout.activity_login)
 
-        // 로그인 버튼
-        btn_login.setOnClickListener {
+        edit_id_login.setText(App.prefs.myId)
+        edit_pw_login.setText(App.prefs.myPw)
 
-            regionServer?.getUser()?.enqueue(object : Callback<List<User>> {
+        // 로그인 버튼
+        btnLogin.setOnClickListener {
+
+            regionServer?.login(edit_id_login.text.toString(),edit_pw_login.text.toString())?.enqueue(object : Callback<Boolean> {
                 override fun onResponse(
-                    call: Call<List<User>>,
-                    response: Response<List<User>>
+                    call: Call<Boolean>,
+                    response: Response<Boolean>
                 ) {
                     Log.d("log", response.toString())
-                    Log.d("log", response.body().toString())
-                    if(!response.body().toString().isEmpty()) {
-                        val text = "OK!"
-                        val duration = Toast.LENGTH_SHORT
 
-                        val toast = Toast.makeText(applicationContext, text, duration)
-                        toast.show()
+                    if(response.body()!!) {
+                        App.prefs.myId = edit_id_login.text.toString()
+                        App.prefs.myPw = edit_pw_login.text.toString()
+                        dialog("success")
+
+                        val intent = Intent(this@MainActivity, Home::class.java)
+                        startActivity(intent)
+
+                    }else{
+                        dialog("fail")
                     }
                 }
 
-                override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
                     Log.d("log", t.message.toString())
                     Log.d("log", "fail")
                 }
             })
-            /*
-            //edit Text로부터 입력된 값을 받아온다
-            var id = edit_id.text.toString()
-            var pw = edit_pw.text.toString()
-
-            // 쉐어드로부터 저장된 id, pw 가져오기
-            val sharedPreference = getSharedPreferences("file name", Context.MODE_PRIVATE)
-            val savedId = sharedPreference.getString("id", "")
-            val savedPw = sharedPreference.getString("pw", "")
-
-            // 유저가 입력한 id, pw값과 쉐어드로 불러온 id, pw값 비교
-            if(id == savedId && pw == savedPw){
-                // 로그인 성공 다이얼로그 보여주기
-
-                dialog("success")
-            }
-            else{
-                // 로그인 실패 다이얼로그 보여주기
-                dialog("fail")
-            }
-            */
         }
 
         // 회원가입 버튼
         btn_register.setOnClickListener {
-            //val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.naver.com/"))
+
             val intent = Intent(this, Register::class.java)
             startActivity(intent)
         }
@@ -85,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     // 로그인 성공/실패 시 다이얼로그를 띄워주는 메소드
     fun dialog(type: String){
         var dialog = AlertDialog.Builder(this)
-
+        Log.d("log",type)
         if(type.equals("success")){
             dialog.setTitle("로그인 성공")
             dialog.setMessage("로그인 성공!")

@@ -13,4 +13,13 @@ interface APIS {
 
     @GET("/user")
     fun getUser() : Call<List<User>>
+
+    @GET("/login")
+    fun login(
+        @Query("id") id: String,
+        @Query("pw") pw: String
+    ) : Call<Boolean>
+
+    @POST("/register")
+    fun register(@Body info: User) : Call<Boolean>
 }

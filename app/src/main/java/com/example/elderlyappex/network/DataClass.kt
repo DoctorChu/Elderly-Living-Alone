@@ -8,5 +8,10 @@ data class User(
     var phone:String = ""
 )
 
+data class login(
+    var id:String = "",
+    var pw:String = ""
+)
+
 data class DTO(var count: Int)
 
