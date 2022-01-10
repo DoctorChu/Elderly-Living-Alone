@@ -45,13 +45,11 @@ class MainActivity : AppCompatActivity() {
                     if(response.body()!!) {
                         App.prefs.myId = edit_id_login.text.toString()
                         App.prefs.myPw = edit_pw_login.text.toString()
-                        dialog("success")
 
                         val intent = Intent(this@MainActivity, Home::class.java)
-                        startActivity(intent)
-
+                        dialog("success", funcOk = { startActivity(intent); finish() })
                     }else{
-                        dialog("fail")
+                        dialog("fail", funcOk = {})
                     }
                 }
 
@@ -72,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // 로그인 성공/실패 시 다이얼로그를 띄워주는 메소드
-    fun dialog(type: String){
+    fun dialog(type: String, funcOk: () -> Unit){
         var dialog = AlertDialog.Builder(this)
         Log.d("log",type)
         if(type.equals("success")){
@@ -86,10 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         var dialog_listener = object: DialogInterface.OnClickListener{
             override fun onClick(dialog: DialogInterface?, which: Int) {
-                when(which){
-                    DialogInterface.BUTTON_POSITIVE ->
-                        Log.d(TAG, "")
-                }
+                funcOk()
             }
         }
 
