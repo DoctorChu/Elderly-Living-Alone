@@ -5,19 +5,18 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import retrofit2.*
 import com.example.elderlyappex.network.APIS
-import com.example.elderlyappex.network.DTO
-import com.example.elderlyappex.network.User
-import com.example.elderlyappex.network.login
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
-    val TAG: String = "MainActivity"
 
+    val TAG = "MainActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val regionRetrofit = Retrofit.Builder()
@@ -26,6 +25,7 @@ class MainActivity : AppCompatActivity() {
             .build()
         val regionServer = regionRetrofit.create(APIS::class.java)
         setContentView(R.layout.activity_login)
+
 
         edit_id_login.setText(App.prefs.myId)
         edit_pw_login.setText(App.prefs.myPw)
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                         App.prefs.myId = edit_id_login.text.toString()
                         App.prefs.myPw = edit_pw_login.text.toString()
 
-                        val intent = Intent(this@MainActivity, Home::class.java)
+                        val intent = Intent(this@MainActivity, HomeActivity::class.java)
                         dialog("success", funcOk = { startActivity(intent); finish() })
                     }else{
                         dialog("fail", funcOk = {})
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         // 회원가입 버튼
         btn_register_login.setOnClickListener {
 
-            val intent = Intent(this, Register::class.java)
+            val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 

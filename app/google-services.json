@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "876561220084",
+    "project_id": "elderly-living-alone",
+    "storage_bucket": "elderly-living-alone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876561220084:android:35f1e91286fe423917f9a1",
+        "android_client_info": {
+          "package_name": "com.example.elderlyappex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876561220084-f7gg19agfpk9hgmofc2agbp85fk32qq7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiSEfLoAglNmBYbdELSag9p3FrGM4ZzBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876561220084-f7gg19agfpk9hgmofc2agbp85fk32qq7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

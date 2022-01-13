@@ -17,9 +17,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class Register : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
-    val TAG: String = "Register"
+    val TAG: String = "RegisterActivity"
     var isExistBlank = false
     var isPWSame = false
 

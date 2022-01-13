@@ -29,9 +29,9 @@ import java.lang.Exception
 
 
 
-class Home : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
 
-    val TAG: String = "Home"
+    val TAG: String = "HomeActivity"
     private lateinit var getResult: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +91,17 @@ class Home : AppCompatActivity() {
                     ) {
                         Toast.makeText(applicationContext, "업로드 완료!!", Toast.LENGTH_SHORT).show()
                         Log.d(TAG,call.toString())
+
+                        try {
+                            // refresh
+                            val intent = intent
+                            finish() //현재 액티비티 종료 실시
+                            overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                            startActivity(intent) //현재 액티비티 재실행 실시
+                            overridePendingTransition(0, 0) //인텐트 애니메이션 없애기
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                     }
                 })
             }
@@ -127,12 +138,12 @@ class Home : AppCompatActivity() {
                         call: Call<ResponseBody>,
                         response: Response<ResponseBody>
                     ) {
-                        val alert = AlertDialog.Builder(this@Home).create()
-                        val factory = LayoutInflater.from(this@Home)
+                        val alert = AlertDialog.Builder(this@HomeActivity).create()
+                        val factory = LayoutInflater.from(this@HomeActivity)
                         val customView = factory.inflate(R.layout.custom_layout, null)
                         val imgView = customView.findViewById<ImageView>(R.id.imageView3)
 
-                        Glide.with(this@Home).load("http://14.52.69.42:3000/hoki.png").into(imgView);
+                        Glide.with(this@HomeActivity).load("http://14.52.69.42:3000/hoki.png").into(imgView);
                         alert.setView(customView)
                         alert.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
                             DialogInterface.OnClickListener { dialogInterface, i -> return@OnClickListener })

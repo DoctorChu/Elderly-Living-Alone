@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">elderlyAppEx</string>
+    <string name="app_name">타겟 질병</string>
     <string name="text_hello">Hello Kotlin!</string>
     <string name="home_text">
         "데이터 분석에는 다소 시간이 걸립니다! (15~20분)\n결과가 준비된다면 안내 문구가 나오게 됩니다.\n새로 고침 버튼을 눌러 확인해주세요."
