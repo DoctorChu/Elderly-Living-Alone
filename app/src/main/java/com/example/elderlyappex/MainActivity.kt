@@ -13,8 +13,6 @@ import com.example.elderlyappex.network.DTO
 import com.example.elderlyappex.network.User
 import com.example.elderlyappex.network.login
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_login.btn_register
-import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
@@ -61,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 회원가입 버튼
-        btn_register.setOnClickListener {
+        btn_register_login.setOnClickListener {
 
             val intent = Intent(this, Register::class.java)
             startActivity(intent)

@@ -33,7 +33,7 @@
             android:layout_height="80dp"
             android:layout_weight="1"
             android:layout_marginLeft="1dp"
-            android:text="결과 다운로드"
+            android:text="req / download"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -68,7 +68,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.65" />
+    <ImageView
+        android:id="@+id/imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"/>
     <Button
+        android:id="@+id/btn_refresh"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginRight="3dp"

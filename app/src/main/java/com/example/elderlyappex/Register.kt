@@ -39,20 +39,21 @@ class Register : AppCompatActivity() {
 
             val id = edit_id.text.toString()
             val pw = edit_pw.text.toString()
-            val pw_re = edit_pw_re.text.toString()
+            val pwRe = edit_pw_re.text.toString()
             val name = edit_name.text.toString()
             val birth = edit_birth.text.toString()
             val phone = edit_phone.text.toString()
 
             // 기입 누락 할 경우
-            if(id.isEmpty() || pw.isEmpty() || pw_re.isEmpty() || name.isEmpty() || birth.isEmpty() || phone.isEmpty()){
+            if(id.isEmpty() || pw.isEmpty() || pwRe.isEmpty() || name.isEmpty() || birth.isEmpty() || phone.isEmpty()){
                 isExistBlank = true
             }
             else{
-                if(pw == pw_re)
+                if(pw == pwRe){
                     isPWSame = true
+                }
             }
-
+            Log.d("pwsame?? ", isPWSame.toString())
             // data class
             val userInfo = User(id,pw,name,birth,phone)
 
@@ -60,10 +61,10 @@ class Register : AppCompatActivity() {
 
             if(!isExistBlank && isPWSame){
 
-                regionServer?.register(userInfo)?.enqueue( object: Callback<Boolean> {
-                    override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                regionServer?.register(userInfo)?.enqueue( object: Callback<String> {
+                    override fun onResponse(call: Call<String>, response: Response<String>) {
                         Log.d("log", "getResponse")
-                        if(response.body() == true){
+                        if(response.body() == "1"){
                             // 성공 토스트
                             Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
 
@@ -81,12 +82,12 @@ class Register : AppCompatActivity() {
                             val intent = Intent(applicationContext, MainActivity::class.java)
                             startActivity(intent)
                         }
-                        else{
-                            dialog("diff")
+                        else if(response.body() == "2"){
+                            dialog("duplicate")
                         }
                     }
 
-                    override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    override fun onFailure(call: Call<String>, t: Throwable) {
                         Log.d("log", t.message.toString())
                         Log.d("log", "fail")
                     }
@@ -96,9 +97,11 @@ class Register : AppCompatActivity() {
                 // issue 출력
                 if(isExistBlank) {
                     dialog("blank")
+                    isExistBlank = false
                 }
                 else if(!isPWSame){
                     dialog("diff")
+                    isPWSame = false
                 }
             }
         }
@@ -116,6 +119,10 @@ class Register : AppCompatActivity() {
         else if (type.equals("diff")){
             dialog.setTitle("회원가입 실패")
             dialog.setMessage("입력된 두 비밀번호가 다릅니다!!")
+        }
+        else if (type.equals("duplicate")){
+            dialog.setTitle("회원가입 실패")
+            dialog.setMessage("중복된 아이디입니다!!")
         }
 
         val dialog_listener = object: DialogInterface.OnClickListener{
