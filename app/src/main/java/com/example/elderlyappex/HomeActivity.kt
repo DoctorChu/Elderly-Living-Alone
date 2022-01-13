@@ -143,7 +143,7 @@ class HomeActivity : AppCompatActivity() {
                         val customView = factory.inflate(R.layout.custom_layout, null)
                         val imgView = customView.findViewById<ImageView>(R.id.imageView3)
 
-                        Glide.with(this@HomeActivity).load("http://14.52.69.42:3000/hoki.png").into(imgView);
+                        Glide.with(this@HomeActivity).load("http://14.52.69.42:3000/" + App.prefs.myId + ".png").into(imgView);
                         alert.setView(customView)
                         alert.setButton(DialogInterface.BUTTON_POSITIVE, "OK",
                             DialogInterface.OnClickListener { dialogInterface, i -> return@OnClickListener })
