@@ -10,6 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.elderlyappex.network.APIS
 import com.example.elderlyappex.network.User
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -69,15 +70,17 @@ class RegisterActivity : AppCompatActivity() {
                             Toast.makeText(applicationContext, "회원가입 성공", Toast.LENGTH_SHORT).show()
 
                             // shared 저장
-                            val sharedPreference = getSharedPreferences("file name", Context.MODE_PRIVATE)
+                            /*val sharedPreference = getSharedPreferences("file name", Context.MODE_PRIVATE)
                             val editor = sharedPreference.edit()
-                            editor.putString("id", id)
-                            editor.putString("pw", pw)
+                            editor.putString("myId", id)
+                            editor.putString("myPw", pw)
                             editor.putString("name", name)
                             editor.putString("birth", birth)
                             editor.putString("phone", phone)
-                            editor.apply()
+                            editor.apply()*/
 
+                            App.prefs.myId = edit_id.text.toString()
+                            App.prefs.myPw = edit_pw.text.toString()
                             // login 화면으로 이동
                             val intent = Intent(applicationContext, MainActivity::class.java)
                             startActivity(intent)

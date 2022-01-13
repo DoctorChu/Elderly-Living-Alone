@@ -30,7 +30,8 @@ interface APIS {
     @GET("/login")
     fun login(
         @Query("id") id: String,
-        @Query("pw") pw: String
+        @Query("pw") pw: String,
+        @Query("token") token: String
     ) : Call<Boolean>
 
     @POST("/register")

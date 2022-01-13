@@ -1,14 +1,22 @@
 package com.example.elderlyappex
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.DialogInterface
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
 import retrofit2.*
 import com.example.elderlyappex.network.APIS
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.iid.FirebaseInstanceIdReceiver
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.android.synthetic.main.activity_login.*
@@ -17,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
 
     val TAG = "MainActivity"
+    var token = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val regionRetrofit = Retrofit.Builder()
@@ -26,6 +35,21 @@ class MainActivity : AppCompatActivity() {
         val regionServer = regionRetrofit.create(APIS::class.java)
         setContentView(R.layout.activity_login)
 
+        // for push alarm
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d(TAG, msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
 
         edit_id_login.setText(App.prefs.myId)
         edit_pw_login.setText(App.prefs.myPw)
@@ -33,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         // 로그인 버튼
         btnLogin.setOnClickListener {
 
-            regionServer?.login(edit_id_login.text.toString(),edit_pw_login.text.toString())?.enqueue(object : Callback<Boolean> {
+            regionServer?.login(edit_id_login.text.toString(),edit_pw_login.text.toString(), token)?.enqueue(object : Callback<Boolean> {
                 override fun onResponse(
                     call: Call<Boolean>,
                     response: Response<Boolean>
